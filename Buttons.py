@@ -1,5 +1,4 @@
 # (c) @TheTgRoBots
-
 class buttons(object):
 START_BUTTONS = InlineKeyboardMarkup(
         [[
