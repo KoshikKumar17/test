@@ -27,8 +27,6 @@ from test.plugins.helper_funcs.message_types import get_welcome_type
 from test.plugins.log_channel import loggable
 
 from test import (
-    JOIN_LOGGER,
-    LOGGER,
     OWNER_ID,
     dispatcher,
     sw,
@@ -284,9 +282,7 @@ def send(update, message, keyboard, backup_message):
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
-            LOGGER.warning(message)
-            LOGGER.warning(keyboard)
-            LOGGER.exception("Could not parse! got invalid url host errors")
+
         elif excp.message == "Have no rights to send a message":
             return
         else:
@@ -298,27 +294,8 @@ def send(update, message, keyboard, backup_message):
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
-            LOGGER.exception()
-    return msg
 
-
-@run_async
-@loggable
-def new_member(update: Update, context: CallbackContext):
-    bot, job_queue = context.bot, context.job_queue
-    chat = update.effective_chat
-    user = update.effective_user
-    msg = update.effective_message
-
-    should_welc, cust_welcome, cust_content, welc_type = sql.get_welc_pref(chat.id)
-    welc_mutes = sql.welcome_mutes(chat.id)
-    human_checks = sql.get_human_checks(user.id, chat.id)
-
-    new_members = update.effective_message.new_chat_members
-
-    for new_mem in new_members:
-
-        welcome_log = None
+        
         res = None
         sent = None
         should_mute = True
@@ -347,39 +324,7 @@ def new_member(update: Update, context: CallbackContext):
                 update.effective_message.reply_text(
                     "Yes!", reply_to_message_id=reply
                 )
-                welcome_log = (
-                    f"{html.escape(chat.title)}\n"
-                    f"#USER_JOINED\n"
-                    f"Bot Owner just joined the chat"
-                )
-                continue
-
-            elif new_mem.id == bot.id:
-                creator = None
-                for x in bot.bot.get_chat_administrators(update.effective_chat.id):
-                    if x.status == "creator":
-                        creator = x.user
-                        break
-                if creator:
-                    bot.send_message(
-                        JOIN_LOGGER,
-                        "#NEW_GROUP\n<b>Group name:</b> {}\n<b>ID:</b> <code>{}</code>\n<b>Creator:</b> <code>{}</code>".format(
-                            html.escape(chat.title), chat.id, html.escape(creator)
-                        ),
-                        parse_mode=ParseMode.HTML,
-                    )
-                else:
-                    bot.send_message(
-                        JOIN_LOGGER,
-                        "#NEW_GROUP\n<b>Group name:</b> {}\n<b>ID:</b> <code>{}</code>".format(
-                            html.escape(chat.title), chat.id
-                        ),
-                        parse_mode=ParseMode.HTML,
-                    )
-                update.effective_message.reply_text(
-                    "yahoo!", reply_to_message_id=reply
-                )
-                continue
+                
 
             else:
                 buttons = sql.get_welc_buttons(chat.id)
@@ -547,17 +492,6 @@ def new_member(update: Update, context: CallbackContext):
                 if sent:
                     sql.set_clean_welcome(chat.id, sent.message_id)
 
-        if welcome_log:
-            return welcome_log
-
-        return (
-            f"{html.escape(chat.title)}\n"
-            f"#USER_JOINED\n"
-            f"<b>User</b>: {mention_html(user.id, user.first_name)}\n"
-            f"<b>ID</b>: <code>{user.id}</code>"
-        )
-
-    return ""
 
 
 def check_not_bot(member, chat_id, message_id, context):
@@ -780,193 +714,6 @@ def goodbye(update: Update, context: CallbackContext):
                 "I understand 'on/yes' or 'off/no' only!"
             )
 
-
-@run_async
-@user_admin
-@loggable
-def set_welcome(update: Update, context: CallbackContext) -> str:
-    chat = update.effective_chat
-    user = update.effective_user
-    msg = update.effective_message
-
-    text, data_type, content, buttons = get_welcome_type(msg)
-
-    if data_type is None:
-        msg.reply_text("You didn't specify what to reply with!")
-        return ""
-
-    sql.set_custom_welcome(chat.id, content, text, data_type, buttons)
-    msg.reply_text("Successfully set custom welcome message!")
-
-    return (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#SET_WELCOME\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"Set the welcome message."
-    )
-
-
-@run_async
-@user_admin
-@loggable
-def reset_welcome(update: Update, context: CallbackContext) -> str:
-    chat = update.effective_chat
-    user = update.effective_user
-
-    sql.set_custom_welcome(chat.id, None, sql.DEFAULT_WELCOME, sql.Types.TEXT)
-    update.effective_message.reply_text(
-        "Successfully reset welcome message to default!"
-    )
-
-    return (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#RESET_WELCOME\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"Reset the welcome message to default."
-    )
-
-
-@run_async
-@user_admin
-@loggable
-def set_goodbye(update: Update, context: CallbackContext) -> str:
-    chat = update.effective_chat
-    user = update.effective_user
-    msg = update.effective_message
-    text, data_type, content, buttons = get_welcome_type(msg)
-
-    if data_type is None:
-        msg.reply_text("You didn't specify what to reply with!")
-        return ""
-
-    sql.set_custom_gdbye(chat.id, content or text, data_type, buttons)
-    msg.reply_text("Successfully set custom goodbye message!")
-    return (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#SET_GOODBYE\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"Set the goodbye message."
-    )
-
-
-@run_async
-@user_admin
-@loggable
-def reset_goodbye(update: Update, context: CallbackContext) -> str:
-    chat = update.effective_chat
-    user = update.effective_user
-
-    sql.set_custom_gdbye(chat.id, sql.DEFAULT_GOODBYE, sql.Types.TEXT)
-    update.effective_message.reply_text(
-        "Successfully reset goodbye message to default!"
-    )
-
-    return (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#RESET_GOODBYE\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"Reset the goodbye message."
-    )
-
-
-@run_async
-@user_admin
-@loggable
-def welcomemute(update: Update, context: CallbackContext) -> str:
-    args = context.args
-    chat = update.effective_chat
-    user = update.effective_user
-    msg = update.effective_message
-
-    if len(args) >= 1:
-        if args[0].lower() in ("off", "no"):
-            sql.set_welcome_mutes(chat.id, False)
-            msg.reply_text("I will no longer mute people on joining!")
-            return (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#WELCOME_MUTE\n"
-                f"<b>• Admin:</b> {mention_html(user.id, user.first_name)}\n"
-                f"Has toggled welcome mute to <b>OFF</b>."
-            )
-        elif args[0].lower() in ["soft"]:
-            sql.set_welcome_mutes(chat.id, "soft")
-            msg.reply_text(
-                "I will restrict users' permission to send media for 24 hours."
-            )
-            return (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#WELCOME_MUTE\n"
-                f"<b>• Admin:</b> {mention_html(user.id, user.first_name)}\n"
-                f"Has toggled welcome mute to <b>SOFT</b>."
-            )
-        elif args[0].lower() in ["strong"]:
-            sql.set_welcome_mutes(chat.id, "strong")
-            msg.reply_text(
-                "I will now mute people when they join until they prove they're not a bot.\nThey will have 120seconds before they get kicked."
-            )
-            return (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#WELCOME_MUTE\n"
-                f"<b>• Admin:</b> {mention_html(user.id, user.first_name)}\n"
-                f"Has toggled welcome mute to <b>STRONG</b>."
-            )
-        else:
-            msg.reply_text(
-                "Please enter <code>off</code>/<code>no</code>/<code>soft</code>/<code>strong</code>!",
-                parse_mode=ParseMode.HTML,
-            )
-            return ""
-    else:
-        curr_setting = sql.welcome_mutes(chat.id)
-        reply = (
-            f"\n Give me a setting!\nChoose one out of: <code>off</code>/<code>no</code> or <code>soft</code> or <code>strong</code> only! \n"
-            f"Current setting: <code>{curr_setting}</code>"
-        )
-        msg.reply_text(reply, parse_mode=ParseMode.HTML)
-        return ""
-
-
-@run_async
-@user_admin
-@loggable
-def clean_welcome(update: Update, context: CallbackContext) -> str:
-    args = context.args
-    chat = update.effective_chat
-    user = update.effective_user
-
-    if not args:
-        clean_pref = sql.get_clean_pref(chat.id)
-        if clean_pref:
-            update.effective_message.reply_text(
-                "I should be deleting welcome messages up to two days old."
-            )
-        else:
-            update.effective_message.reply_text(
-                "I'm currently not deleting old welcome messages!"
-            )
-        return ""
-
-    if args[0].lower() in ("on", "yes"):
-        sql.set_clean_welcome(str(chat.id), True)
-        update.effective_message.reply_text("I'll try to delete old welcome messages!")
-        return (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#CLEAN_WELCOME\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-            f"Has toggled clean welcomes to <code>ON</code>."
-        )
-    elif args[0].lower() in ("off", "no"):
-        sql.set_clean_welcome(str(chat.id), False)
-        update.effective_message.reply_text("I won't delete old welcome messages.")
-        return (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#CLEAN_WELCOME\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-            f"Has toggled clean welcomes to <code>OFF</code>."
-        )
-    else:
-        update.effective_message.reply_text("I understand 'on/yes' or 'off/no' only!")
-        return ""
 
 
 @run_async
