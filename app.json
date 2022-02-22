@@ -1,22 +1,15 @@
 {
-    "name": "EvaMariaBot",
+    "name": "Group Manager Bot",
     "description": "When you going to send file on telegram channel this bot will save that in database, So you can search that easily in inline mode",
     "stack": "container",
     "keywords": [
       "telegram",
       "auto-filter",
       "filter",
-      "best",
-      "indian",
-      "pyrogram",
-      "media",
-      "search",
-      "channel",
-      "index",
       "inline"
     ],
-    "website": "https://github.com/EvamariaTG/EvaMaria",
-    "repository": "https://github.com/EvamariaTG/EvaMaria",
+    "website": "https://github.com/The-TG-RoBots/Group-Manager-Bot",
+    "repository": "https://github.com/The-TG-RoBots/Group-Manager-Bot",
     "env": {
         "BOT_TOKEN": {
             "description": "Your bot token.",
