@@ -10,7 +10,8 @@ Bot = Client(
     api_id=APP_ID,
     api_hash=API_HASH,
     bot_token=BOT_TOKEN,
-    plugins=plugins,
+    workers=50,
+    plugins=plugins
 )
 
 
