@@ -1,6 +1,6 @@
 # (c) @TheTgRoBots
 class buttons(object):
-START_BUTTONS = InlineKeyboardMarkup(
+START_BUTTONS = """InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('🤔 Help 🤔', callback_data='help'),
         InlineKeyboardButton('😇 About 😇', callback_data='about')
@@ -10,14 +10,14 @@ START_BUTTONS = InlineKeyboardMarkup(
         ],[
         InlineKeyboardButton('❌ Close ❌', callback_data='close')
         ]]
-    )
-HELP_BUTTONS = InlineKeyboardMarkup(
+    )"""
+HELP_BUTTONS = """InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('⬅️ Back', callback_data='start')
         ]]
-    )
-ABOUT_BUTTONS = InlineKeyboardMarkup(
+    )"""
+ABOUT_BUTTONS = """InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('⬅️ Back', callback_data='start')
         ]]
-    )
+    )"""
