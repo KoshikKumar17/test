@@ -2,7 +2,7 @@ import random, threading
 from typing import Union 
 from sqlalchemy import BigInteger, Boolean, Column, Integer, String, UnicodeText
 from test.modules.helper_funcs.message_types import Types
-from test.plugins.SQL import BASE, SESSION
+from test.plugins import BASE, SESSION
 
 DEFAULT_WELCOME = "Hi {first}, how are you?"
 DEFAULT_GOODBYE = "Nice knowing ya!"
@@ -102,8 +102,8 @@ WelcomeMuteUsers.__table__.create(checkfirst=True)
 CleanServiceSetting.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
-WELC_BTN_LOCK = threading.RLock()
-LEAVE_BTN_LOCK = threading.RLock()
+WELCOME_BUTTON_LOCK = threading.RLock()
+LEAVE_BUTTON_LOCK = threading.RLock()
 WM_LOCK = threading.RLock()
 CS_LOCK = threading.RLock()
 
@@ -252,7 +252,7 @@ def set_custom_welcome(
 
         SESSION.add(welcome_settings)
 
-        with WELC_BTN_LOCK:
+        with WELCOME_BUTTON_LOCK:
             prev_buttons = (
                 SESSION.query(WelcomeButtons)
                 .filter(WelcomeButtons.chat_id == str(chat_id))
@@ -297,7 +297,7 @@ def set_custom_gdbye(chat_id, custom_goodbye, goodbye_type, buttons=None):
 
         SESSION.add(welcome_settings)
 
-        with LEAVE_BTN_LOCK:
+        with LEAVE_BUTTON_LOCK:
             prev_buttons = (
                 SESSION.query(GoodbyeButtons)
                 .filter(GoodbyeButtons.chat_id == str(chat_id))
@@ -374,7 +374,7 @@ def migrate_chat(old_chat_id, new_chat_id):
         if chat:
             chat.chat_id = str(new_chat_id)
 
-        with WELC_BTN_LOCK:
+        with WELCOME_BUTTON_LOCK:
             chat_buttons = (
                 SESSION.query(WelcomeButtons)
                 .filter(WelcomeButtons.chat_id == str(old_chat_id))
@@ -383,7 +383,7 @@ def migrate_chat(old_chat_id, new_chat_id):
             for btn in chat_buttons:
                 btn.chat_id = str(new_chat_id)
 
-        with LEAVE_BTN_LOCK:
+        with LEAVE_BUTTON_LOCK:
             chat_buttons = (
                 SESSION.query(GoodbyeButtons)
                 .filter(GoodbyeButtons.chat_id == str(old_chat_id))
