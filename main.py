@@ -2,17 +2,19 @@
 
 import os
 from pyrogram import Client
-from info import SESSION, APP_ID, API_HASH, BOT_TOKEN
+from config import Config
 
-plugins = dict(root="plugins")
-Bot = Client(
-    session_name=SESSION,
-    api_id=APP_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
-    workers=50,
-    plugins=plugins
-)
+class Bot(Client):
+
+    def __init__(self):
+        super().__init__(
+            session_name="RENAMEBOT",
+            api_id=Config.APP_ID,
+            api_hash=Config.API_HASH,
+            bot_token=Config.TG_BOT_TOKEN,
+            plugins={"root": "root/plugins"},
+            sleep_threshold=5
+        )
 
 
 Bot.run()
