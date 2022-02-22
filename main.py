@@ -17,4 +17,5 @@ class Bot(Client):
         )
 
 
-Bot.run()
+app = Bot()
+app.run()
