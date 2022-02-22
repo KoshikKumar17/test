@@ -1,6 +1,6 @@
 # (c) @TheTgRoBots
 # selling codes for money is strictly prohibited.
-
+import os
 # Bot information
 class Config(object):
   APP_ID = int(os.environ.get("APP_ID", ""))
