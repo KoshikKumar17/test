@@ -16,7 +16,7 @@
         },
         "SQLALCHEMY_DATABASE_URI": {
             "description": "",
-            "required": "True"
+            "required": "False"
         },
         "BOT_TOKEN": {
             "description": "",
