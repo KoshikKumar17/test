@@ -2,6 +2,7 @@
 
 import os
 from Script import script
+from Buttons import buttons
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 
@@ -12,19 +13,19 @@ async def cb_data(bot, update):
         await update.message.edit_text(
             text=script.START_TEXT,
             disable_web_page_preview=True,
-            reply_markup=START_BUTTONS
+            reply_markup=buttons.START_BUTTONS
         )
     elif update.data == "help":
         await update.message.edit_text(
             text=script.HELP_TEXT,
             disable_web_page_preview=True,
-            reply_markup=HELP_BUTTONS
+            reply_markup=buttons.HELP_BUTTONS
         )
     elif update.data == "about":
         await update.message.edit_text(
             text=script.ABOUT_TEXT,
             disable_web_page_preview=True,
-            reply_markup=ABOUT_BUTTONS
+            reply_markup=buttons.ABOUT_BUTTONS
         )
     elif update.data == "close":
         await update.message.delete()
