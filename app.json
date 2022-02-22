@@ -1,0 +1,37 @@
+{
+    "name": "Group Manager Bot",
+    "description": "Group Manager Bot",
+    "keywords": [
+        "GroupManagerBot"
+    ],
+    "repository": "https://github.com/KoshikKumar17/test",
+    "env": {
+        "APP_ID": {
+            "description": "",
+            "required": "True"
+        },
+        "API_HASH": {
+            "description": "",
+            "required": "True"
+        },
+        "SQLALCHEMY_DATABASE_URI": {
+            "description": "",
+            "required": "True"
+        },
+        "BOT_TOKEN": {
+            "description": "",
+            "required": "True"
+        },
+        "OWNER_ID": {
+            "description": "",
+            "required": "True"
+        }
+    },
+    "stack": "heroku-20",
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
