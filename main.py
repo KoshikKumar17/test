@@ -12,7 +12,7 @@ class Bot(Client):
             api_id=Config.APP_ID,
             api_hash=Config.API_HASH,
             bot_token=Config.BOT_TOKEN,
-            plugins=plugins,
+            plugins={"root": "plugins"},
             sleep_threshold=5
         )
 
