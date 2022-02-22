@@ -8,7 +8,15 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyb
 async def start(bot, update):
         thetgrobots = await update.reply_text("**Processing...⏸️**")
         await thetgrobots.edit_text(
-        text=script.REVIEW_TXT,
-        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('✨ Channel ✨', url='https://t.me/thetgrobots')]]),
-        disable_web_page_preview = True
+        text=script.START_TEXT,
+        reply_markup = InlineKeyboardMarkup([[
+                 InlineKeyboardButton('🤔 Help 🤔', callback_data='help'),
+                 InlineKeyboardButton('😇 About 😇', callback_data='about')
+                 ],[
+                 InlineKeyboardButton('↗️ Channel ↗️', url='https://t.me/thetgrobots'),
+                 InlineKeyboardButton('⭕ GitHub', url='https://github.com/The-TG-RoBots)
+                 ],[
+                 InlineKeyboardButton('❌ Close ❌', callback_data='close')
+        ]])
+       disable_web_page_preview = True
     )
