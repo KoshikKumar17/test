@@ -15,10 +15,9 @@ async def start(bot, update):
             ],[
             InlineKeyboardButton('❌ Close ❌', callback_data='close')
         ]]
-        reply_markup = InlineKeyboardMarkup(buttons)
         thetgrobots = await update.reply_text("**Processing...⏸️**")
         await thetgrobots.edit_text(
         text=script.START_TEXT,
-        reply_markup = InlineKeyboardMarkup(hkrrish)
+        reply_markup = InlineKeyboardMarkup(hkrrish),
        disable_web_page_preview = True
     )
