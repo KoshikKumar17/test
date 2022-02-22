@@ -9,7 +9,8 @@ async def start(bot, update):
         thetgrobots = await update.reply_text("**Processing...⏸️**")
         await thetgrobots.edit_text(
         text=script.START_TEXT,
-        reply_markup = InlineKeyboardMarkup([[
+        reply_markup = InlineKeyboardMarkup(
+        [[
                  InlineKeyboardButton('🤔 Help 🤔', callback_data='help'),
                  InlineKeyboardButton('😇 About 😇', callback_data='about')
                  ],[
@@ -17,6 +18,7 @@ async def start(bot, update):
                  InlineKeyboardButton('⭕ GitHub', url='https://github.com/The-TG-RoBots')
                  ],[
                  InlineKeyboardButton('❌ Close ❌', callback_data='close')
-        ]])
+        ]]
+)
        disable_web_page_preview = True
     )
