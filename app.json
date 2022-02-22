@@ -10,6 +10,8 @@
     ],
     "website": "https://github.com/The-TG-RoBots/Group-Manager-Bot",
     "repository": "https://github.com/The-TG-RoBots/Group-Manager-Bot",
+    "plan": "heroku-postgresql"
+      }
     "env": {
         "BOT_TOKEN": {
             "description": "Your bot token.",
@@ -22,7 +24,17 @@
         "API_HASH": {
             "description": "Get this value from https://my.telegram.org",
             "required": true
-        }, 
+        },
+        "SQLALCHEMY_DATABASE_URI": {
+         "description": "Your postgres sql db, empty this field if you dont have one.",
+         "required": false,
+         "value": ""
+      },
+        "OWNER_ID": {
+         "description": "Your user ID as an integer.",
+         "required": true,
+         "value": ""
+      },
     },
     "addons": [],
     "buildpacks": [{
