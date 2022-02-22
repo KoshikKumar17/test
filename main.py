@@ -8,11 +8,11 @@ class Bot(Client):
 
     def __init__(self):
         super().__init__(
-            session_name="RENAMEBOT",
+            session_name="GROUP-BOT",
             api_id=Config.APP_ID,
             api_hash=Config.API_HASH,
-            bot_token=Config.TG_BOT_TOKEN,
-            plugins={"root": "root/plugins"},
+            bot_token=Config.BOT_TOKEN,
+            plugins=plugins,
             sleep_threshold=5
         )
 
