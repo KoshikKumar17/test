@@ -1,0 +1,40 @@
+{
+  "name": "Group Manager Bot",
+  "description": "None",
+  "keywords": [
+    "telegram",
+    "best"
+  ],
+  "logo": "https://telegra.ph/file/e4587d9b253bb9101a119.jpg",
+  "success_url": "https://telegram.dog/thetgrobots",
+  "website": "https://github.com/The-TG-RoBots/Group-Manager-Bot",
+  "repository": "https://github.com/The-TG-RoBots/Group-Manager-Bot",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Your bot token, as a string.",
+      "value": ""
+    "APP_ID": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+    "API_HASH": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+  },
+  "addons": [
+  {
+    "plan": "heroku-postgresql",
+    "options": {"version": "12"}
+  }
+  ],
+  "buildpacks": [{
+    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+  }, {
+    "url": "heroku/python"
+  }],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
