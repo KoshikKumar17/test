@@ -14,7 +14,7 @@ async def start(bot, update):
                  InlineKeyboardButton('😇 About 😇', callback_data='about')
                  ],[
                  InlineKeyboardButton('↗️ Channel ↗️', url='https://t.me/thetgrobots'),
-                 InlineKeyboardButton('⭕ GitHub', url='https://github.com/The-TG-RoBots)
+                 InlineKeyboardButton('⭕ GitHub', url='https://github.com/The-TG-RoBots')
                  ],[
                  InlineKeyboardButton('❌ Close ❌', callback_data='close')
         ]])
