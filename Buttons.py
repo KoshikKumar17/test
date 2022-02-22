@@ -1,7 +1,6 @@
 # (c) @TheTgRoBots
 
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-
+class buttons(object):
 START_BUTTONS = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('🤔 Help 🤔', callback_data='help'),
