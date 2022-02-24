@@ -1,9 +1,6 @@
 # (c) Sirius and Koshik
 
-import os
-import threading
 from sqlalchemy import create_engine
-from sqlalchemy import Column, TEXT, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
